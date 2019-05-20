@@ -7,9 +7,10 @@ const cors = require("cors");
 const registerRouter = require("./routes/auth/register");
 const loginRouter = require("./routes/auth/login");
 
+// server invokation
 const server = express();
 
-// utils
+// middleware utils
 server.use(express.json());
 server.use(helmet());
 server.use(cors());
