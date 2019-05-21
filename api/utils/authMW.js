@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
 				});
 			} else {
 				req.headers.token = decodedToken;
-				req.headers.userID = decodedToken.subject;
+				req.headers.userID = Number(decodedToken.subject);
 				next();
 			}
 		});
