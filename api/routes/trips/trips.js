@@ -13,9 +13,20 @@ router.get("/", authMW, async (req, res) => {
 
 		// console.log(req.headers.userID);
 		console.log(trips);
-		res.send({ trips });
+		res.status(200).json({ trips });
 	} catch (err) {
-		console.log(err);
+		res.status(500).json({ message: "DB error", err });
+	}
+});
+
+router.get("/:id", authMW, async (req, res) => {
+	const id = req.params.id;
+
+	try {
+		const trip = await Trips.getTripByTripID(id);
+		res.status(200).json(trip);
+	} catch (err) {
+		res.status(500).json(err);
 	}
 });
 
@@ -34,7 +45,7 @@ router.post("/addTrip", authMW, async (req, res) => {
 
 		try {
 			const tripAdded = await Trips.addTrip(trip);
-			res.send(tripAdded);
+			res.status(201).json(tripAdded);
 		} catch (err) {
 			res.status(500).json({ message: "Database error", err });
 		}
