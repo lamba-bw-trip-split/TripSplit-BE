@@ -22,7 +22,7 @@ router.get("/", authMW, async (req, res) => {
 });
 
 // add back authMW
-router.get("/:id", async (req, res) => {
+router.get("/:id", authMW, async (req, res) => {
 	const id = req.params.id;
 
 	try {
@@ -36,7 +36,7 @@ router.get("/:id", async (req, res) => {
 
 // endpoint for changing boolean value of "completed"
 
-router.get("/:id/updateStatus", async (req, res) => {
+router.get("/:id/updateStatus", authMW, async (req, res) => {
 	const [id] = req.params.id;
 
 	try {
@@ -48,6 +48,7 @@ router.get("/:id/updateStatus", async (req, res) => {
 	}
 });
 
+// TRIP EXPENSES
 router.get("/:id/expenses", authMW, async (req, res) => {
 	const id = req.params.id;
 
@@ -59,6 +60,7 @@ router.get("/:id/expenses", authMW, async (req, res) => {
 	}
 });
 
+// ADD A TRIP
 router.post("/addTrip", authMW, async (req, res) => {
 	const authorID = req.headers.userID;
 
