@@ -49,16 +49,16 @@ router.get("/:id/updateStatus", authMW, async (req, res) => {
 });
 
 // TRIP EXPENSES
-router.get("/:id/expenses", authMW, async (req, res) => {
-	const id = req.params.id;
+// router.get("/:id/expenses", authMW, async (req, res) => {
+// 	const id = req.params.id;
 
-	try {
-		tripExs = await TripExpenses.findByTripId(id);
-		res.status(200).json(tripExs);
-	} catch (err) {
-		res.status(500).json(err);
-	}
-});
+// 	try {
+// 		tripExs = await TripExpenses.findByTripId(id);
+// 		res.status(200).json(tripExs);
+// 	} catch (err) {
+// 		res.status(500).json(err);
+// 	}
+// });
 
 // ADD A TRIP
 router.post("/addTrip", authMW, async (req, res) => {

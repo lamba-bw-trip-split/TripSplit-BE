@@ -2,7 +2,18 @@ const express = require("express");
 const Expenses = require("../../models/Expenses-model");
 const authMW = require("../../utils/authMW");
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
+
+router.get("/", authMW, async (req, res) => {
+	const [id] = req.params.tripid;
+
+	try {
+		tripExs = await Expenses.findByTripId(id);
+		res.status(200).json(tripExs);
+	} catch (err) {
+		res.status(500).json(err);
+	}
+});
 
 router.get("/:id", authMW, async (req, res) => {
 	const id = req.params.id;
@@ -18,7 +29,13 @@ router.get("/:id", authMW, async (req, res) => {
 
 router.post("/", async (req, res) => {
 	expense = req.body;
-	let { trip_id, description, amount } = req.body;
+	const trip_id = req.params.tripid;
+	let { description, amount } = req.body;
+
+	expense = {
+		...expense,
+		trip_id: trip_id
+	};
 
 	if (trip_id && description && amount) {
 		let newEx = await Expenses.addExToTrip(expense);
@@ -40,10 +57,11 @@ router.post("/", async (req, res) => {
 
 // delete expense function
 router.delete("/:id", authMW, async (req, res) => {
-	const [id] = req.params.id;
+	const id = req.params.id;
 
 	try {
 		let deleted = await Expenses.deleteExpense(id);
+
 		if (deleted === 1) {
 			res.status(201).json({ message: `Expense deleted!` });
 		} else {
@@ -57,13 +75,12 @@ router.delete("/:id", authMW, async (req, res) => {
 });
 
 router.put("/:id", authMW, async (req, res) => {
-	const [id] = req.params.id;
+	const id = req.params.id;
 	let toBeNewExpense = req.body;
 
 	try {
 		let newExpense = await Expenses.updateExpense(id, toBeNewExpense);
 
-		console.log(newExpense);
 		res.status(201).json(newExpense);
 	} catch (err) {
 		res.status(500).json(err);

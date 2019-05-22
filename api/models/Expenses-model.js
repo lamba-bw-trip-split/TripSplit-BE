@@ -40,8 +40,6 @@ async function updateExpense(expense_id, toBeNewExpense) {
 		.where({ expense_id })
 		.update(toBeNewExpense);
 
-	console.log(update);
-
 	let newExpense = await findByExId(expense_id);
 
 	return newExpense;

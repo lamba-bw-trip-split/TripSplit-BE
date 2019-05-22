@@ -26,8 +26,9 @@ server.use("/auth/register/", registerRouter);
 server.use("/auth/login/", loginRouter);
 
 // trips
-server.use("/api/trips", tripsRouter);
+server.use("/api/trips/", tripsRouter);
 // expenses
-server.use("/api/expenses", expensesRouter);
+// server.use("/api/expenses", expensesRouter);
+server.use("/api/trips/:tripid/expenses/", expensesRouter);
 
 module.exports = server;
