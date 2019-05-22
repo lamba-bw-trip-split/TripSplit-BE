@@ -3,7 +3,8 @@ const db = require("../../data/dbConfig");
 module.exports = {
 	findByExId,
 	addExToTrip,
-	findByTripId
+	findByTripId,
+	deleteExpense
 };
 
 function findByExId(expense_id) {
@@ -21,5 +22,16 @@ async function addExToTrip(expense) {
 }
 
 function findByTripId(trip_id) {
-	return db("Expenses").where({ trip_id });
+	return db("Expenses")
+		.where({ trip_id })
+		.first();
+}
+
+async function deleteExpense(expense_id) {
+	let deleted = await db("Expenses")
+		.where({ expense_id })
+		.first()
+		.del();
+
+	return deleted;
 }

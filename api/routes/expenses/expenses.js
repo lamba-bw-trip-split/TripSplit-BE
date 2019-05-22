@@ -7,11 +7,9 @@ const router = express.Router();
 router.get("/:id", authMW, async (req, res) => {
 	const id = req.params.id;
 
-	console.log(id);
 	try {
 		let expenses = await Expenses.findByExId(id);
 
-		console.log(expenses);
 		res.status(200).json(expenses);
 	} catch (err) {
 		res.status(500).json({ err });
@@ -35,6 +33,26 @@ router.post("/", async (req, res) => {
 			message:
 				"You need to provide a both a description, and expense amount. In addition, you must specify which trip this expense shall be added to."
 		});
+	}
+});
+
+// router.put
+
+// delete expense function
+router.delete("/:id", authMW, async (req, res) => {
+	const [id] = req.params.id;
+
+	try {
+		let deleted = await Expenses.deleteExpense(id);
+		if (deleted === 1) {
+			res.status(201).json({ message: `Expense deleted!` });
+		} else {
+			res.status(404).json({
+				message: `No expense found to delete! Was the expense ID valid?`
+			});
+		}
+	} catch (err) {
+		res.status(500).json(err);
 	}
 });
 
