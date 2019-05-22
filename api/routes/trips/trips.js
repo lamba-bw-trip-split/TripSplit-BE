@@ -10,7 +10,7 @@ router.get("/", authMW, async (req, res) => {
 	// const authorID = Number(req.headers.userID);
 	const authorID = req.headers.userID;
 	try {
-		console.log(authorID);
+		// console.log(authorID);
 		const trips = await Trips.getTripByAuthor(authorID);
 
 		// console.log(req.headers.userID);
@@ -21,12 +21,28 @@ router.get("/", authMW, async (req, res) => {
 	}
 });
 
-router.get("/:id", authMW, async (req, res) => {
+// add back authMW
+router.get("/:id", async (req, res) => {
 	const id = req.params.id;
 
 	try {
 		const trip = await Trips.getTripByTripID(id);
+
 		res.status(200).json(trip);
+	} catch (err) {
+		res.status(500).json(err);
+	}
+});
+
+// endpoint for changing boolean value of "completed"
+
+router.get("/:id/updateStatus", async (req, res) => {
+	const [id] = req.params.id;
+
+	try {
+		const updatedStatus = await Trips.boolTripStatus(id);
+
+		res.status(200).json(updatedStatus);
 	} catch (err) {
 		res.status(500).json(err);
 	}
@@ -66,5 +82,7 @@ router.post("/addTrip", authMW, async (req, res) => {
 		res.status(500).json({ message: "A description of the trip is required." });
 	}
 });
+
+// router.get("/")
 
 module.exports = router;
