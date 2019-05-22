@@ -4,7 +4,8 @@ module.exports = {
 	findByExId,
 	addExToTrip,
 	findByTripId,
-	deleteExpense
+	deleteExpense,
+	updateExpense
 };
 
 function findByExId(expense_id) {
@@ -34,4 +35,16 @@ async function deleteExpense(expense_id) {
 		.del();
 
 	return deleted;
+}
+
+async function updateExpense(expense_id, toBeNewExpense) {
+	let update = await db("Expenses")
+		.where({ expense_id })
+		.update(toBeNewExpense);
+
+	console.log(update);
+
+	let newExpense = await findByExId(expense_id);
+
+	return newExpense;
 }

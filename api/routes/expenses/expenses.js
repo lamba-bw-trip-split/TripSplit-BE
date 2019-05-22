@@ -56,4 +56,18 @@ router.delete("/:id", authMW, async (req, res) => {
 	}
 });
 
+router.put("/:id", authMW, async (req, res) => {
+	const [id] = req.params.id;
+	let toBeNewExpense = req.body;
+
+	try {
+		let newExpense = await Expenses.updateExpense(id, toBeNewExpense);
+
+		console.log(newExpense);
+		res.status(201).json(newExpense);
+	} catch (err) {
+		res.status(500).json(err);
+	}
+});
+
 module.exports = router;
