@@ -23,9 +23,7 @@ async function addExToTrip(expense) {
 }
 
 function findByTripId(trip_id) {
-	return db("Expenses")
-		.where({ trip_id })
-		.first();
+	return db("Expenses").where({ trip_id });
 }
 
 async function deleteExpense(expense_id) {
