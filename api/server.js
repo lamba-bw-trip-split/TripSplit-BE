@@ -7,6 +7,7 @@ const cors = require("cors");
 const registerRouter = require("./routes/auth/register");
 const loginRouter = require("./routes/auth/login");
 const tripsRouter = require("./routes/trips/trips");
+const expensesRouter = require("./routes/expenses/expenses");
 
 // server invokation
 const server = express();
@@ -26,5 +27,7 @@ server.use("/auth/login/", loginRouter);
 
 // trips
 server.use("/api/trips", tripsRouter);
+// expenses
+server.use("/api/expenses", expensesRouter);
 
 module.exports = server;

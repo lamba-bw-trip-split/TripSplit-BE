@@ -1,9 +1,11 @@
 const express = require("express");
 const Trips = require("../../models/Trips-model");
+const TripExpenses = require("../../models/Expenses-model");
 const authMW = require("../../utils/authMW");
 
 const router = express.Router();
 
+// "my trips". Will return trips of the user logged in
 router.get("/", authMW, async (req, res) => {
 	// const authorID = Number(req.headers.userID);
 	const authorID = req.headers.userID;
@@ -25,6 +27,17 @@ router.get("/:id", authMW, async (req, res) => {
 	try {
 		const trip = await Trips.getTripByTripID(id);
 		res.status(200).json(trip);
+	} catch (err) {
+		res.status(500).json(err);
+	}
+});
+
+router.get("/:id/expenses", authMW, async (req, res) => {
+	const id = req.params.id;
+
+	try {
+		tripExs = await TripExpenses.findByTripId(id);
+		res.status(200).json(tripExs);
 	} catch (err) {
 		res.status(500).json(err);
 	}
