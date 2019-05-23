@@ -39,7 +39,7 @@ function getTripByTripID(trip_id) {
 }
 
 async function addTrip(trip) {
-	const [id] = await db("Trips").insert(trip);
+	const [id] = await db("Trips").insert(trip, "trip_id");
 
 	return getTripByTripID(id);
 }

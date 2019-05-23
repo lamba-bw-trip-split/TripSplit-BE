@@ -21,7 +21,7 @@ function findById(id) {
 }
 
 async function add(user) {
-	const [id] = await db("Users").insert(user);
+	const [id] = await db("Users").insert(user, "id");
 
 	return findById(id);
 }
