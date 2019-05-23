@@ -18,7 +18,39 @@ async function getTripByTripID(trip_id) {
 		.where({ trip_id })
 		.first();
 
-	if (trip) {
+	let expenses = await db("Expenses")
+		.join("Trips", "Trips.trip_id", "Expenses.trip_id")
+		.where("Expenses.trip_id", trip_id)
+		.select(
+			"Expenses.expense_id",
+			"Expenses.trip_id",
+			"Expenses.description",
+			"Expenses.amount"
+		);
+
+	let members = await db("expenseMembers")
+		.join("Trips", "Trips.trip_id", "expenseMembers.trip_id")
+		.where("expenseMembers.trip_id", trip_id)
+		.select("expenseMembers.username", "expenseMembers.paid");
+	// TRIP JOIN WITH EXPENSES AND MEMBERS
+
+	if (trip && expenses && members) {
+		return {
+			...trip,
+			expenses,
+			members
+		};
+	} else if (trip && expenses) {
+		return {
+			...trip,
+			expenses
+		};
+	} else if (trip && members) {
+		return {
+			...trip,
+			members
+		};
+	} else if (trip) {
 		return trip;
 	} else {
 		return false;
