@@ -15,7 +15,7 @@ function findByExId(expense_id) {
 }
 
 async function addExToTrip(expense) {
-	let [ExID] = await db("Expenses").insert(expense);
+	let [ExID] = await db("Expenses").insert(expense, "expense_id");
 
 	let ExRes = await findByExId(ExID);
 
