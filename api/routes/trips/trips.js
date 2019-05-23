@@ -67,6 +67,29 @@ router.post("/:id/members", authMW, async (req, res) => {
 	}
 });
 
+// delete member from trip
+router.delete(":/id/members", authMW, async (req, res) => {
+	const trip_id = req.params.id;
+	let { username } = req.body;
+
+	if (username) {
+		try {
+			let tripMembers = await TripMembers.removeMemberFromTrip(
+				trip_id,
+				username
+			);
+			res.status(201).json(tripMembers);
+		} catch (error) {
+			res.status(500).json(error);
+		}
+	} else {
+		res.status(400).json({
+			message:
+				"Must provide username of person you wish to delete from this trip!"
+		});
+	}
+});
+
 // Update existing trip "completed" boolean value by trip id
 router.get("/:id/updateStatus", authMW, checkIfAuthor, async (req, res) => {
 	const id = req.params.id;
