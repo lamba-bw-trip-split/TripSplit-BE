@@ -27,9 +27,12 @@ router.get("/:id", authMW, async (req, res) => {
 	}
 });
 
-router.post("/", async (req, res) => {
+router.post("/", authMW, async (req, res) => {
 	expense = req.body;
 	const trip_id = req.params.tripid;
+	const authorName = req.headers.userName;
+	console.log("from exp router", authorName);
+
 	let { description, amount } = req.body;
 
 	expense = {
@@ -38,7 +41,7 @@ router.post("/", async (req, res) => {
 	};
 
 	if (trip_id && description && amount) {
-		let newEx = await Expenses.addExToTrip(expense);
+		let newEx = await Expenses.addExToTrip(expense, authorName);
 
 		try {
 			res.status(201).json(newEx);
