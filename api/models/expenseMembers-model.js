@@ -29,7 +29,7 @@ async function addMemberToTrip(trip_id, username) {
 	// take in trip, username
 
 	let tripMemObj = {
-		username: usernameusername.toLowerCase(),
+		username: username.toLowerCase(),
 		trip_id: trip_id
 	};
 	// add username to trip
@@ -79,7 +79,7 @@ async function boolPaidStatus(expense_id, trip_id, username) {
 		.select("paid")
 		.where({
 			expense_id: expense_id,
-			username: usernameusername.toLowerCase(),
+			username: username.toLowerCase(),
 			trip_id: trip_id
 		})
 		.first();
@@ -87,7 +87,7 @@ async function boolPaidStatus(expense_id, trip_id, username) {
 	const newStatus = await db("expenseMembers")
 		.where({
 			expense_id: expense_id,
-			username: usernameusername.toLowerCase(),
+			username: username.toLowerCase(),
 			trip_id: trip_id
 		})
 		.update("paid", !oldStatus.paid);
