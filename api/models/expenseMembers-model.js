@@ -12,7 +12,10 @@ module.exports = {
 
 async function getTripMembers(trip_id) {
 	let tripMembers = await db("expenseMembers")
-		.where({ trip_id })
+		.where({
+			"expenseMembers.trip_id": trip_id,
+			"expenseMembers.expense_id": null
+		})
 		.select("username");
 
 	return tripMembers;
