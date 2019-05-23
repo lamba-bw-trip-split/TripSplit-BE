@@ -29,9 +29,6 @@ async function addTrip(trip, authorName) {
 	const [id] = await db("Trips").insert(trip, "trip_id");
 	// const [id] = await db("Trips").insert(trip);
 
-	console.log(authorName);
-	console.log(trip);
-	console.log(id);
 	const newExpMember = {
 		username: authorName,
 		trip_id: id

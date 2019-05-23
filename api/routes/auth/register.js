@@ -4,6 +4,7 @@ const Users = require("../../models/Users-model");
 
 const router = express.Router();
 
+// Register a new user. Requires a username, password, and email.
 router.post("/", (req, res) => {
 	let { username, password, email } = req.body;
 

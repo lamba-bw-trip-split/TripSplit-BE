@@ -5,6 +5,7 @@ const authMW = require("../../utils/authMW");
 
 const router = express.Router({ mergeParams: true });
 
+// Get expenses for trip via trip id
 router.get("/", authMW, async (req, res) => {
 	const [id] = req.params.tripid;
 
@@ -16,6 +17,7 @@ router.get("/", authMW, async (req, res) => {
 	}
 });
 
+// Get specific expense for trip via expense id.
 router.get("/:id", authMW, async (req, res) => {
 	const id = req.params.id;
 
@@ -28,6 +30,7 @@ router.get("/:id", authMW, async (req, res) => {
 	}
 });
 
+// Get members who belong to that expense via expense id.
 router.get("/:id/members", authMW, async (req, res) => {
 	const id = req.params.id;
 
@@ -40,6 +43,7 @@ router.get("/:id/members", authMW, async (req, res) => {
 	}
 });
 
+// Add members to specific expense via expense id. Requires username of registered user.
 router.post("/:id/members", authMW, async (req, res) => {
 	const expense_id = req.params.id;
 	const trip_id = req.params.tripid;
@@ -65,6 +69,7 @@ router.post("/:id/members", authMW, async (req, res) => {
 	}
 });
 
+// Toggle specific individual's payment status on specific expense via expense id and individual's username.
 router.post("/:id/members/paid", authMW, async (req, res) => {
 	const expense_id = req.params.id;
 	const trip_id = req.params.tripid;
@@ -90,6 +95,7 @@ router.post("/:id/members/paid", authMW, async (req, res) => {
 	}
 });
 
+// Delete specific individual from specific expense via expense id and individual's username.
 router.delete("/:id/members", authMW, async (req, res) => {
 	const expense_id = req.params.id;
 	const trip_id = req.params.tripid;
@@ -115,11 +121,11 @@ router.delete("/:id/members", authMW, async (req, res) => {
 	}
 });
 
+// Add a new expense to a specific trip. Requires expense description and amount (integer) in request.
 router.post("/", authMW, async (req, res) => {
 	expense = req.body;
 	const trip_id = req.params.tripid;
 	const authorName = req.headers.userName;
-	console.log("from exp router", authorName);
 
 	let { description, amount } = req.body;
 
@@ -144,9 +150,7 @@ router.post("/", authMW, async (req, res) => {
 	}
 });
 
-// router.put
-
-// delete expense function
+// Delete specific expense from trip via expense id.
 router.delete("/:id", authMW, async (req, res) => {
 	const id = req.params.id;
 
@@ -165,6 +169,7 @@ router.delete("/:id", authMW, async (req, res) => {
 	}
 });
 
+// Edit an existing expense via expense id. Pass changes in request body.
 router.put("/:id", authMW, async (req, res) => {
 	const id = req.params.id;
 	let toBeNewExpense = req.body;
