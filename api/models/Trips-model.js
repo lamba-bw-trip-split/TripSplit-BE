@@ -4,7 +4,9 @@ module.exports = {
 	getTripByAuthor,
 	getTripByTripID,
 	addTrip,
-	boolTripStatus
+	boolTripStatus,
+	deleteTrip,
+	updateTrip
 };
 
 function getTripByAuthor(trip_creator) {
@@ -54,4 +56,24 @@ async function boolTripStatus(trip_id) {
 		.update("completed", !oldStatus.completed);
 
 	return getTripByTripID(trip_id);
+}
+
+async function deleteTrip(trip_id) {
+	let deleted = await db("Trips")
+		.where({ trip_id })
+		.first()
+		.del();
+
+	console.log(deleted);
+	return deleted;
+}
+
+async function updateTrip(trip_id, toBeNewTrip) {
+	let update = await db("Trips")
+		.where({ trip_id })
+		.update(toBeNewTrip);
+
+	let newTrip = await getTripByTripID(trip_id);
+
+	return newTrip;
 }

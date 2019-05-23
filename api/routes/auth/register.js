@@ -15,7 +15,7 @@ router.post("/", (req, res) => {
 		user.username = user.username.toLowerCase();
 		Users.add(user)
 			.then(newUser => {
-				res.status(200).json(newUser);
+				res.status(201).json(newUser);
 			})
 			.catch(err => {
 				res.send(err);

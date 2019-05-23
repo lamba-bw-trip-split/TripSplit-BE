@@ -48,18 +48,6 @@ router.get("/:id/updateStatus", authMW, async (req, res) => {
 	}
 });
 
-// TRIP EXPENSES
-// router.get("/:id/expenses", authMW, async (req, res) => {
-// 	const id = req.params.id;
-
-// 	try {
-// 		tripExs = await TripExpenses.findByTripId(id);
-// 		res.status(200).json(tripExs);
-// 	} catch (err) {
-// 		res.status(500).json(err);
-// 	}
-// });
-
 // ADD A TRIP
 router.post("/addTrip", authMW, async (req, res) => {
 	const authorID = req.headers.userID;
@@ -85,6 +73,30 @@ router.post("/addTrip", authMW, async (req, res) => {
 	}
 });
 
-// router.get("/")
+// DELETE A TRIP
+router.delete("/:id", authMW, async (req, res) => {
+	const [id] = req.params.id;
+	try {
+		let toDelete = await Trips.deleteTrip(id);
+		console.log(toDelete);
+		if (toDelete === 1) {
+			res
+				.status(200)
+				.json({ message: `Your trip has been deleted succesfully!` });
+		} else {
+			res.status(404).json({
+				message: `Trip could not be deleted. Please ensure you are attempting to delete a valid trip.`
+			});
+		}
+	} catch (error) {
+		res.status(500).json(error);
+	}
+});
+
+// UPDATE A TRIP
+router.put("/:id", authMW, async (req, res) => {
+	const [id] = req.params.id;
+	let updatedTrip = req.body;
+});
 
 module.exports = router;
