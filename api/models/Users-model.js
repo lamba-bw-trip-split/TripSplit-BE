@@ -27,7 +27,7 @@ async function add(user) {
 	const [id] = await db("Users").insert(user, "id");
 	// const [id] = await db("Users").insert(user);
 
-	const userProfile = await db("Profiles").insert(userrname, "username");
+	const userProfile = await db("Profiles").insert(profile, "username");
 	// const userProfile = await db("Profiles").insert(profile);
 
 	return findById(id);
