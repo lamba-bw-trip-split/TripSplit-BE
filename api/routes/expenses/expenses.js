@@ -1,5 +1,6 @@
 const express = require("express");
 const Expenses = require("../../models/Expenses-model");
+const ExpenseMembers = require("../../models/expenseMembers-model");
 const authMW = require("../../utils/authMW");
 
 const router = express.Router({ mergeParams: true });
@@ -24,6 +25,68 @@ router.get("/:id", authMW, async (req, res) => {
 		res.status(200).json(expenses);
 	} catch (err) {
 		res.status(500).json({ err });
+	}
+});
+
+router.get("/:id/members", authMW, async (req, res) => {
+	const id = req.params.id;
+
+	try {
+		let expMembers = await ExpenseMembers.getExpenseMembers(id);
+
+		res.status(200).json(expMembers);
+	} catch (err) {
+		res.status(500).json(err);
+	}
+});
+
+router.post("/:id/members", authMW, async (req, res) => {
+	const expense_id = req.params.id;
+	const trip_id = req.params.tripid;
+
+	let { username } = req.body;
+
+	if (username) {
+		try {
+			let newExpMemList = await ExpenseMembers.addMemberToExpense(
+				expense_id,
+				trip_id,
+				username
+			);
+
+			res.status(201).json(newExpMemList);
+		} catch (err) {
+			res.status(500).json({ err });
+		}
+	} else {
+		res.status(400).json({
+			message: "A username is required to add a friend to an expense."
+		});
+	}
+});
+
+router.delete("/:id/members", authMW, async (req, res) => {
+	const expense_id = req.params.id;
+	const trip_id = req.params.tripid;
+
+	let { username } = req.body;
+
+	if (username) {
+		try {
+			let itemToDel = await ExpenseMembers.removeMemberFromExpense(
+				expense_id,
+				trip_id,
+				username
+			);
+
+			res.status(200).json(itemToDel);
+		} catch (error) {
+			res.status(500).json(err);
+		}
+	} else {
+		res
+			.status(404)
+			.json({ message: "Must provide username to delete user from expense" });
 	}
 });
 
