@@ -26,8 +26,8 @@ async function getTripByTripID(trip_id) {
 }
 
 async function addTrip(trip, authorName) {
-	// const [id] = await db("Trips").insert(trip, "trip_id");
-	const [id] = await db("Trips").insert(trip);
+	const [id] = await db("Trips").insert(trip, "trip_id");
+	// const [id] = await db("Trips").insert(trip);
 
 	console.log(authorName);
 	console.log(trip);
@@ -37,7 +37,9 @@ async function addTrip(trip, authorName) {
 		trip_id: id
 	};
 
-	const expenseMember = await db("expenseMembers").insert(newExpMember);
+	// const expenseMember = await db("expenseMembers").insert(newExpMember);
+	const expenseMember = await db("expenseMembers").insert(newExpMember, "id");
+
 	return getTripByTripID(id);
 }
 
