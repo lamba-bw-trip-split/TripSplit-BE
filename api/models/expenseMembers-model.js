@@ -29,7 +29,7 @@ async function addMemberToTrip(trip_id, username) {
 	// take in trip, username
 
 	let tripMemObj = {
-		username: username,
+		username: username.toLowerCase(),
 		trip_id: trip_id
 	};
 	// add username to trip
@@ -47,7 +47,7 @@ async function addMemberToExpense(expense_id, trip_id, username) {
 	let expMemObj = {
 		expense_id: expense_id,
 		trip_id: trip_id,
-		username: username
+		username: username.toLowerCase()
 	};
 
 	// let memberOfExpense = await db("expenseMembers").insert(expMemObj);
@@ -64,7 +64,7 @@ async function removeMemberFromExpense(expense_id, trip_id, username) {
 	let toDelete = await db("expenseMembers")
 		.where({
 			expense_id: expense_id,
-			username: username,
+			username: username.toLowerCase(),
 			trip_id: trip_id
 		})
 		.del();
@@ -77,11 +77,19 @@ async function removeMemberFromExpense(expense_id, trip_id, username) {
 async function boolPaidStatus(expense_id, trip_id, username) {
 	const oldStatus = await db("expenseMembers")
 		.select("paid")
-		.where({ expense_id: expense_id, username: username, trip_id: trip_id })
+		.where({
+			expense_id: expense_id,
+			username: username.toLowerCase(),
+			trip_id: trip_id
+		})
 		.first();
 
 	const newStatus = await db("expenseMembers")
-		.where({ expense_id: expense_id, username: username, trip_id: trip_id })
+		.where({
+			expense_id: expense_id,
+			username: username.toLowerCase(),
+			trip_id: trip_id
+		})
 		.update("paid", !oldStatus.paid);
 
 	return getExpenseMembers(expense_id);
