@@ -25,7 +25,7 @@ function getTripByAuthor(trip_creator) {
 
 function getTripByTripID(trip_id) {
 	return (
-		db("trips")
+		db("Trips")
 			// .select(
 			// 	"description",
 			// 	"trip_creator",
