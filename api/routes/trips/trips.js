@@ -1,6 +1,7 @@
 const express = require("express");
 const Trips = require("../../models/Trips-model");
 const TripExpenses = require("../../models/Expenses-model");
+const checkIfAuthor = require("../../utils/checkIfAuthor");
 const authMW = require("../../utils/authMW");
 
 const router = express.Router();
@@ -14,21 +15,23 @@ router.get("/", authMW, async (req, res) => {
 		const trips = await Trips.getTripByAuthor(authorID);
 
 		// console.log(req.headers.userID);
-		console.log(trips);
 		res.status(200).json({ trips });
 	} catch (err) {
 		res.status(500).json({ message: "DB error", err });
 	}
 });
 
-// add back authMW
+// get trip details by trip id
 router.get("/:id", authMW, async (req, res) => {
 	const id = req.params.id;
 
 	try {
 		const trip = await Trips.getTripByTripID(id);
-
-		res.status(200).json(trip);
+		if (trip) {
+			res.status(200).json(trip);
+		} else {
+			res.status(404).json({ message: "No trip found with that ID!" });
+		}
 	} catch (err) {
 		res.status(500).json(err);
 	}
@@ -74,11 +77,10 @@ router.post("/addTrip", authMW, async (req, res) => {
 });
 
 // DELETE A TRIP
-router.delete("/:id", authMW, async (req, res) => {
+router.delete("/:id", authMW, checkIfAuthor, async (req, res) => {
 	const [id] = req.params.id;
 	try {
 		let toDelete = await Trips.deleteTrip(id);
-		console.log(toDelete);
 		if (toDelete === 1) {
 			res
 				.status(200)

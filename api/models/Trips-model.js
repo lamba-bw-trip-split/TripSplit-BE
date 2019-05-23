@@ -23,19 +23,23 @@ function getTripByAuthor(trip_creator) {
 	);
 }
 
-function getTripByTripID(trip_id) {
-	return (
-		db("Trips")
-			// .select(
-			// 	"description",
-			// 	"trip_creator",
-			// 	"trip_start",
-			// 	"trip_end",
-			// 	"completed"
-			// )
-			.where({ trip_id })
-			.first()
-	);
+async function getTripByTripID(trip_id) {
+	let trip = await db("Trips")
+		// .select(
+		// 	"description",
+		// 	"trip_creator",
+		// 	"trip_start",
+		// 	"trip_end",
+		// 	"completed"
+		// )
+		.where({ trip_id })
+		.first();
+
+	if (trip) {
+		return trip;
+	} else {
+		return false;
+	}
 }
 
 async function addTrip(trip) {
