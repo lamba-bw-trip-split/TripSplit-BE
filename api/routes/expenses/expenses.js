@@ -65,6 +65,31 @@ router.post("/:id/members", authMW, async (req, res) => {
 	}
 });
 
+router.post("/:id/members/paid", authMW, async (req, res) => {
+	const expense_id = req.params.id;
+	const trip_id = req.params.tripid;
+
+	let { username } = req.body;
+
+	if (username) {
+		try {
+			let newExpMemList = await ExpenseMembers.boolPaidStatus(
+				expense_id,
+				trip_id,
+				username
+			);
+
+			res.status(201).json(newExpMemList);
+		} catch (err) {
+			res.status(500).json({ err });
+		}
+	} else {
+		res.status(400).json({
+			message: "A username is required to update expense payment status."
+		});
+	}
+});
+
 router.delete("/:id/members", authMW, async (req, res) => {
 	const expense_id = req.params.id;
 	const trip_id = req.params.tripid;
