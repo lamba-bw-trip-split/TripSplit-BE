@@ -5,7 +5,8 @@ module.exports = {
 	getExpenseMembers,
 	addMemberToTrip,
 	addMemberToExpense,
-	removeMemberFromExpense
+	removeMemberFromExpense,
+	boolPaidStatus
 };
 
 async function getTripMembers(trip_id) {
@@ -71,4 +72,17 @@ async function removeMemberFromExpense(expense_id, trip_id, username) {
 	let newMembersOfExpenses = await getExpenseMembers(expense_id);
 
 	return newMembersOfExpenses;
+}
+
+async function boolPaidStatus(expense_id, trip_id, username) {
+	const oldStatus = await db("expenseMembers")
+		.select("paid")
+		.where({ expense_id: expense_id, username: username, trip_id: trip_id })
+		.first();
+
+	const newStatus = await db("expenseMembers")
+		.where({ expense_id: expense_id, username: username, trip_id: trip_id })
+		.update("paid", !oldStatus.paid);
+
+	return getExpenseMembers(expense_id);
 }
