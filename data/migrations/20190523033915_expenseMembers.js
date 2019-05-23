@@ -23,6 +23,8 @@ exports.up = function(knex, Promise) {
 			.notNullable()
 			.onDelete("CASCADE")
 			.onUpdate("CASCADE");
+
+		tbl.boolean("paid").defaultTo(false);
 	});
 };
 

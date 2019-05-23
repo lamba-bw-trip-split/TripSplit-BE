@@ -43,9 +43,9 @@ async function addMemberToTrip(trip_id, username) {
 
 async function addMemberToExpense(expense_id, trip_id, username) {
 	let expMemObj = {
-		username: username,
+		expense_id: expense_id,
 		trip_id: trip_id,
-		expense_id: expense_id
+		username: username
 	};
 
 	// let memberOfExpense = await db("expenseMembers").insert(expMemObj);
