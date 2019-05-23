@@ -4,6 +4,7 @@ module.exports = {
 	getTripMembers,
 	getExpenseMembers,
 	addMemberToTrip,
+	removeMemberFromTrip,
 	addMemberToExpense,
 	removeMemberFromExpense,
 	boolPaidStatus
@@ -41,6 +42,22 @@ async function addMemberToTrip(trip_id, username) {
 	let newMembersOfTrip = await getTripMembers(trip_id);
 
 	return newMembersOfTrip;
+}
+
+async function removeMemberFromTrip(trip_id, username) {
+	//
+
+	let toDelete = await db("expenseMembers")
+		.where({
+			expense_id: null || undefined,
+			username: username.toLowerCase(),
+			trip_id: trip_id
+		})
+		.del();
+
+	let newTripMembers = await getTripMembers(trip_id);
+
+	return newTripMembers;
 }
 
 async function addMemberToExpense(expense_id, trip_id, username) {
