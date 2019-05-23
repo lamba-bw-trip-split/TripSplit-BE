@@ -19,7 +19,7 @@ async function getTripMembers(trip_id) {
 async function getExpenseMembers(expense_id) {
 	let expenseMembers = await db("expenseMembers")
 		.where({ expense_id })
-		.select("username");
+		.select("username", "paid");
 
 	return expenseMembers;
 }
