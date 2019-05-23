@@ -38,6 +38,7 @@ router.get("/:id", authMW, async (req, res) => {
 	}
 });
 
+// Get members associated with that trip via trip id
 router.get("/:id/members", authMW, async (req, res) => {
 	const id = req.params.id;
 
@@ -49,6 +50,7 @@ router.get("/:id/members", authMW, async (req, res) => {
 	}
 });
 
+// Add an existing registered user to a trip via trip id. Requires username of user in request.
 router.post("/:id/members", authMW, async (req, res) => {
 	const id = req.params.id;
 	let { username } = req.body;
@@ -67,7 +69,33 @@ router.post("/:id/members", authMW, async (req, res) => {
 	}
 });
 
-// Update existing trip "completed" boolean value by trip id
+// Note: You are not required to be the author to add members to a trip (above function).
+// You are, however, required to be the author of the trip if you would like to remove members from a trip.
+
+// Delete an existing registered user from a trip via trip id. Requires username of user in request. Must be the author of the trip to do so.
+router.delete(":/id/members", authMW, checkIfAuthor, async (req, res) => {
+	const trip_id = req.params.id;
+	let { username } = req.body;
+
+	if (username) {
+		try {
+			let tripMembers = await TripMembers.removeMemberFromTrip(
+				trip_id,
+				username
+			);
+			res.status(201).json(tripMembers);
+		} catch (error) {
+			res.status(500).json(error);
+		}
+	} else {
+		res.status(400).json({
+			message:
+				"Must provide username of person you wish to delete from this trip!"
+		});
+	}
+});
+
+// Update existing trip "completed" boolean value by trip id. Must be the author of the trip to do so.
 router.get("/:id/updateStatus", authMW, checkIfAuthor, async (req, res) => {
 	const id = req.params.id;
 
@@ -80,12 +108,10 @@ router.get("/:id/updateStatus", authMW, checkIfAuthor, async (req, res) => {
 	}
 });
 
-// Add a new trip
+// Add a new trip. Requires description of trip in request.
 router.post("/addTrip", authMW, async (req, res) => {
 	const authorID = req.headers.userID;
 	const authorName = req.headers.userName;
-	console.log("from router", authorName);
-	console.log("router", authorID);
 	let { description, trip_start, trip_end } = req.body;
 
 	if (description) {
@@ -107,7 +133,7 @@ router.post("/addTrip", authMW, async (req, res) => {
 	}
 });
 
-// Delete an existing trip
+// Delete an existing trip via trip id. Must be the author of the trip to do so.
 router.delete("/:id", authMW, checkIfAuthor, async (req, res) => {
 	const id = req.params.id;
 
@@ -127,7 +153,7 @@ router.delete("/:id", authMW, checkIfAuthor, async (req, res) => {
 	}
 });
 
-// Update an existing trip
+// Update an existing trip via trip id. Must be the author of the trip to do so.
 router.put("/:id", authMW, checkIfAuthor, async (req, res) => {
 	const id = req.params.id;
 	let tripUpdates = req.body;

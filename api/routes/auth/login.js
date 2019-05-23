@@ -5,9 +5,8 @@ const tokenService = require("../../utils/token-service");
 
 const router = express.Router();
 
+// Log an existing user in. Requires a username and password.
 router.post("/", (req, res) => {
-	// remember to make username toLowerCase
-
 	let { username, password } = req.body;
 	if (username && password) {
 		username = username.toLowerCase();
