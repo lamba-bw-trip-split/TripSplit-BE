@@ -10,42 +10,38 @@ module.exports = {
 };
 
 function getTripByAuthor(trip_creator) {
-	return (
-		db("Trips")
-			// .select(
-			// 	"description",
-			// 	"trip_creator",
-			// 	"trip_start",
-			// 	"trip_end",
-			// 	"completed"
-			// )
-			.where({ trip_creator })
-	);
+	return db("Trips").where({ trip_creator });
 }
 
-function getTripByTripID(trip_id) {
-	return (
-		db("Trips")
-			// .select(
-			// 	"description",
-			// 	"trip_creator",
-			// 	"trip_start",
-			// 	"trip_end",
-			// 	"completed"
-			// )
-			.where({ trip_id })
-			.first()
-	);
+async function getTripByTripID(trip_id) {
+	let trip = await db("Trips")
+		.where({ trip_id })
+		.first();
+
+	if (trip) {
+		return trip;
+	} else {
+		return false;
+	}
 }
 
-async function addTrip(trip) {
-	const [id] = await db("Trips").insert(trip, "trip_id");
+async function addTrip(trip, authorName) {
+	// const [id] = await db("Trips").insert(trip, "trip_id");
+	const [id] = await db("Trips").insert(trip);
 
+	console.log(authorName);
+	console.log(trip);
+	console.log(id);
+	const newExpMember = {
+		username: authorName,
+		trip_id: id
+	};
+
+	const expenseMember = await db("expenseMembers").insert(newExpMember);
 	return getTripByTripID(id);
 }
 
 async function boolTripStatus(trip_id) {
-	//
 	const oldStatus = await db("Trips")
 		.select("completed")
 		.where({ trip_id })
@@ -64,7 +60,6 @@ async function deleteTrip(trip_id) {
 		.first()
 		.del();
 
-	console.log(deleted);
 	return deleted;
 }
 
