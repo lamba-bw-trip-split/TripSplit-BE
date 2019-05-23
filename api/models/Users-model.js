@@ -21,14 +21,14 @@ function findById(id) {
 }
 
 async function add(user) {
-	// const [id] = await db("Users").insert(user, "id");
 	const profile = {
 		username: user.username
 	};
-	const [id] = await db("Users").insert(user);
+	const [id] = await db("Users").insert(user, "id");
+	// const [id] = await db("Users").insert(user);
 
-	// const userProfile = await db("Profiles").insert(userrname, "username");
-	const userProfile = await db("Profiles").insert(profile);
+	const userProfile = await db("Profiles").insert(userrname, "username");
+	// const userProfile = await db("Profiles").insert(profile);
 
 	return findById(id);
 }
