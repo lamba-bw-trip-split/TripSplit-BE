@@ -65,6 +65,31 @@ router.post("/:id/members", authMW, async (req, res) => {
 	}
 });
 
+router.delete("/:id/members", authMW, async (req, res) => {
+	const expense_id = req.params.id;
+	const trip_id = req.params.tripid;
+
+	let { username } = req.body;
+
+	if (username) {
+		try {
+			let itemToDel = await ExpenseMembers.removeMemberFromExpense(
+				expense_id,
+				trip_id,
+				username
+			);
+
+			res.status(200).json(itemToDel);
+		} catch (error) {
+			res.status(500).json(err);
+		}
+	} else {
+		res
+			.status(404)
+			.json({ message: "Must provide username to delete user from expense" });
+	}
+});
+
 router.post("/", authMW, async (req, res) => {
 	expense = req.body;
 	const trip_id = req.params.tripid;

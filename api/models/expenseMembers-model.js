@@ -4,7 +4,8 @@ module.exports = {
 	getTripMembers,
 	getExpenseMembers,
 	addMemberToTrip,
-	addMemberToExpense
+	addMemberToExpense,
+	removeMemberFromExpense
 };
 
 async function getTripMembers(trip_id) {
@@ -50,6 +51,22 @@ async function addMemberToExpense(expense_id, trip_id, username) {
 
 	// let memberOfExpense = await db("expenseMembers").insert(expMemObj);
 	let memberOfExpense = await db("expenseMembers").insert(expMemObj, "id");
+
+	let newMembersOfExpenses = await getExpenseMembers(expense_id);
+
+	return newMembersOfExpenses;
+}
+
+async function removeMemberFromExpense(expense_id, trip_id, username) {
+	//
+
+	let toDelete = await db("expenseMembers")
+		.where({
+			expense_id: expense_id,
+			username: username,
+			trip_id: trip_id
+		})
+		.del();
 
 	let newMembersOfExpenses = await getExpenseMembers(expense_id);
 
