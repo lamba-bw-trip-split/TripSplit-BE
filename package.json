@@ -1,0 +1,26 @@
+{
+	"name": "TripSplit-BE",
+	"version": "1.0.0",
+	"main": "index.js",
+	"repository": "https://github.com/lamba-bw-trip-split/TripSplit-BE.git",
+	"author": "omar okla <omaro@me.com>",
+	"license": "MIT",
+	"scripts": {
+		"start": "node index.js",
+		"server": "nodemon index.js"
+	},
+	"dependencies": {
+		"bcryptjs": "^2.4.3",
+		"cors": "^2.8.5",
+		"dotenv": "^8.0.0",
+		"express": "^4.17.0",
+		"helmet": "^3.18.0",
+		"jsonwebtoken": "^8.5.1",
+		"knex": "^0.16.5",
+		"pg": "^7.11.0",
+		"sqlite3": "^4.0.8"
+	},
+	"devDependencies": {
+		"nodemon": "^1.19.0"
+	}
+}
