@@ -30,7 +30,10 @@ async function getTripByTripID(trip_id) {
 
 	let members = await db("expenseMembers")
 		.join("Trips", "Trips.trip_id", "expenseMembers.trip_id")
-		.where("expenseMembers.trip_id", trip_id)
+		.where({
+			"expenseMembers.trip_id": trip_id,
+			"expenseMembers.expense_id": null
+		})
 		.select("expenseMembers.username", "expenseMembers.paid");
 	// TRIP JOIN WITH EXPENSES AND MEMBERS
 
