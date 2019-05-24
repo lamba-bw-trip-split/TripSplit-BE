@@ -7,7 +7,7 @@ const router = express.Router({ mergeParams: true });
 
 // Get expenses for trip via trip id
 router.get("/", authMW, async (req, res) => {
-	const [id] = req.params.tripid;
+	const id = req.params.tripid;
 
 	try {
 		tripExs = await Expenses.findByTripId(id);
