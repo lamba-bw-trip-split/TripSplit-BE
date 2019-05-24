@@ -36,7 +36,9 @@ async function addExToTrip(expense, authorName) {
 }
 
 async function findByTripId(trip_id) {
-	let tripex = await db("Expenses").where({ trip_id });
+	let tripex = await db("Expenses")
+		.where({ trip_id })
+		.first();
 
 	return tripex;
 }
