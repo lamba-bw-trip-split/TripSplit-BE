@@ -35,8 +35,10 @@ async function addExToTrip(expense, authorName) {
 	return ExRes;
 }
 
-function findByTripId(trip_id) {
-	return db("Expenses").where({ trip_id });
+async function findByTripId(trip_id) {
+	let tripex = await db("Expenses").where({ trip_id });
+
+	return tripex;
 }
 
 async function deleteExpense(expense_id) {
