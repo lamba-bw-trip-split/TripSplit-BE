@@ -11,6 +11,8 @@ const expensesRouter = require("./routes/expenses/expenses");
 
 // server invokation
 const server = express();
+server.use(helmet());
+server.use(cors());
 
 // middleware utils
 server.use(express.json());
